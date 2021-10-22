@@ -1,3 +1,9 @@
 .idea
 node_modules
-dist
+# NOTE: Need to dist, After "npm install --save git+url" commands.
+# dist
+
+# develop
+.vscode
+package-lock.json
+

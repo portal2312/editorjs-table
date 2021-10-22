@@ -238,6 +238,10 @@ export default class Table {
           confirmationRequired: true,
           onClick: () => {
             this.deleteRow(this.selectedRow);
+
+            // FIXED Uncaught TypeError: Cannot read properties of null (reading 'getBoundingClientRect')
+            this.hoveredRow -= 1;
+
             this.hideToolboxes();
           }
         }

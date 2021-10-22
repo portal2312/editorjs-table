@@ -1,18 +1,19 @@
 {
-  "name": "@editorjs/table",
-  "description": "Table for Editor.js",
+  "name": "@portal2312/editorjs-table",
+  "description": "Table for Editor.js bugfix",
   "version": "2.0.1",
   "license": "MIT",
   "main": "./dist/table.js",
   "scripts": {
     "build": "webpack --mode production",
     "build:dev": "webpack --mode development --watch",
-    "lint": "eslint -c ./.eslintrc --ext .js --fix ."
+    "lint": "eslint -c ./.eslintrc --ext .js --fix .",
+    "types": "npx -p typescript tsc src/*.js --declaration --allowJs --emitDeclarationOnly --outDir types"
   },
-  "repository": "https://github.com/editor-js/table",
+  "repository": "https://github.com/portal2312/editorjs-table",
   "author": {
-    "name": "CodeX Team",
-    "email": "team@ifmo.su"
+    "name": "mkkim",
+    "email": "portal2312@gmail.com"
   },
   "keywords": [
     "codex",
@@ -33,6 +34,7 @@
     "postcss-nesting": "^7.0.0",
     "style-loader": "^0.23.1",
     "svg-inline-loader": "^0.8.0",
+    "typescript": "^4.4.4",
     "webpack": "^4.29.5",
     "webpack-cli": "^3.2.3"
   }
