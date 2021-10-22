@@ -18,7 +18,7 @@ import * as $ from './utils/dom';
  */
 /**
  * @typedef {object} TableData - object with the data transferred to form a table
- * @property {boolean} withHeading - setting to use cells of the first row as headings
+ * @property {boolean} withHeadings - setting to use cells of the first row as headings
  * @property {string[][]} content - two-dimensional array which contains table content
  */
 

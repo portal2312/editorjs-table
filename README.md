@@ -14,6 +14,12 @@ npm install --save git+https://github.com/portal2312/editorjs-table.git
 
 ## Hotfix
 
+### typo `withHeading` in `plugin.js`
+
+Fixed `withHeading` to `withHeadings`:
+
+- `./plugin.js`
+
 ### Uncaught TypeError: Cannot read properties of null (reading 'getBoundingClientRect')
 
 UI: Click to "Delete row" at Last row.
@@ -33,6 +39,10 @@ Uncaught TypeError: Cannot read properties of null (reading 'getBoundingClientRe
     at HTMLDivElement.eval (popover.js:76)
 ```
 
-Fixed: Refer to `./table.js`.
+Fixed:
 
-Reason: `this.deleteRow()` 이후 `this.hideToolboxes()` 에서 `this.hoveredRow` 값을 이용하여 element 를 찾아 제어하려고 함.
+- `./table.js`
+
+Reason:
+
+- `this.deleteRow()` 이후 `this.hideToolboxes()` 에서 `this.hoveredRow` 값을 이용하여 element 를 찾아 제어하려고 함.

@@ -12,7 +12,7 @@
  */
 /**
  * @typedef {object} TableData - object with the data transferred to form a table
- * @property {boolean} withHeading - setting to use cells of the first row as headings
+ * @property {boolean} withHeadings - setting to use cells of the first row as headings
  * @property {string[][]} content - two-dimensional array which contains table content
  */
 /**
@@ -145,7 +145,7 @@ export type TableData = {
     /**
      * - setting to use cells of the first row as headings
      */
-    withHeading: boolean;
+    withHeadings: boolean;
     /**
      * - two-dimensional array which contains table content
      */
