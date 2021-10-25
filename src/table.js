@@ -112,10 +112,12 @@ export default class Table {
        * Also, check if clicked in current table, not other (because documentClicked bound to the whole document)
        */
       if (clickedOnAddRowButton && clickedOnAddRowButton.parentNode === this.wrapper) {
-        this.addRow(undefined, true);
+        const insertedRow = this.addRow(undefined, true);
+        this.afterAddRowBelow(insertedRow);
         this.hideToolboxes();
       } else if (clickedOnAddColumnButton && clickedOnAddColumnButton.parentNode === this.wrapper) {
-        this.addColumn(undefined, true);
+        const insertedCells = this.addColumn(undefined, true);
+        this.afterAddColumnRight(insertedCells);
         this.hideToolboxes();
       }
     };
@@ -168,7 +170,8 @@ export default class Table {
           label: this.api.i18n.t('Add column to left'),
           icon: newToLeftIcon,
           onClick: () => {
-            this.addColumn(this.selectedColumn, true);
+            const insertedCells = this.addColumn(this.selectedColumn, true);
+            this.afterAddColumnLeft(insertedCells);
             this.hideToolboxes();
           }
         },
@@ -176,7 +179,8 @@ export default class Table {
           label: this.api.i18n.t('Add column to right'),
           icon: newToRightIcon,
           onClick: () => {
-            this.addColumn(this.selectedColumn + 1, true);
+            const insertedCells = this.addColumn(this.selectedColumn + 1, true);
+            this.afterAddColumnRight(insertedCells);
             this.hideToolboxes();
           }
         },
@@ -190,6 +194,7 @@ export default class Table {
           onClick: () => {
             this.deleteColumn(this.selectedColumn);
             this.hideToolboxes();
+            this.afterDeleteColumn();
           }
         }
       ],
@@ -217,7 +222,8 @@ export default class Table {
           label: this.api.i18n.t('Add row above'),
           icon: newToUpIcon,
           onClick: () => {
-            this.addRow(this.selectedRow, true);
+            const insertedRow = this.addRow(this.selectedRow, true);
+            this.afterAddRowAbove(insertedRow);
             this.hideToolboxes();
           }
         },
@@ -225,7 +231,8 @@ export default class Table {
           label: this.api.i18n.t('Add row below'),
           icon: newToDownIcon,
           onClick: () => {
-            this.addRow(this.selectedRow + 1, true);
+            const insertedRow = this.addRow(this.selectedRow + 1, true);
+            this.afterAddRowBelow(insertedRow);
             this.hideToolboxes();
           }
         },
@@ -243,6 +250,7 @@ export default class Table {
             this.hoveredRow -= 1;
 
             this.hideToolboxes();
+            this.afterDeleteRow();
           }
         }
       ],
@@ -339,6 +347,7 @@ export default class Table {
     /**
      * Iterate all rows and add a new cell to them for creating a column
      */
+    const cells = [];
     for (let rowIndex = 1; rowIndex <= this.numberOfRows; rowIndex++) {
       let cell;
       const cellElem = this.createCell();
@@ -361,9 +370,13 @@ export default class Table {
           $.focus(firstCell);
         }
       }
+
+      cells.push(cellElem);
     }
 
     this.addHeadingAttrToFirstRow();
+
+    return cells;
   };
 
   /**
@@ -509,11 +522,13 @@ export default class Table {
     const { rows, cols } = this.computeInitialSize();
 
     for (let i = 0; i < rows; i++) {
-      this.addRow();
+      const insertedRow = this.addRow();
+      this.afterAddRowBelow(insertedRow);
     }
 
     for (let i = 0; i < cols; i++) {
-      this.addColumn();
+      const insertedCells = this.addColumn();
+      this.afterAddColumnRight(insertedCells);
     }
   }
 
@@ -951,4 +966,49 @@ export default class Table {
   destroy() {
     document.removeEventListener('click', this.documentClicked);
   }
+
+  /**
+   * Custom method
+   * 
+   * @param {HTMLElement} insertedRow
+   * @returns {void}
+   */
+  afterAddRowAbove(insertedRow) {}
+
+  /**
+   * Custom method
+   * 
+   * @param {HTMLElement} insertedRow
+   * @returns {void}
+   */
+  afterAddRowBelow(insertedRow) {}
+
+  /**
+   * Custom method
+   * 
+   * @returns {void}
+   */
+  afterDeleteRow() {}
+
+  /**
+   * Custom method
+   * 
+   * @param {HTMLElement[]} insertedCells
+   * @returns {void}
+   */
+  afterAddColumnLeft(insertedCells) {}
+
+  /**
+   * Custom method
+   * 
+   * @returns {void}
+   */
+  afterAddColumnRight(insertedCells) {}
+
+  /**
+   * Custom method
+   * 
+   * @returns {void}
+   */
+  afterDeleteColumn() {}
 }

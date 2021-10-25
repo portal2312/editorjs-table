@@ -116,7 +116,7 @@ export default class Table {
      * @param {number} columnIndex - number in the array of columns, where new column to insert, -1 if insert at the end
      * @param {boolean} [setFocus] - pass true to focus the first cell
      */
-    addColumn(columnIndex?: number, setFocus?: boolean): void;
+    addColumn(columnIndex?: number, setFocus?: boolean): Element[];
     /**
      * Add row in table on index place
      *
@@ -333,5 +333,44 @@ export default class Table {
      * Remove listeners on the document
      */
     destroy(): void;
+    /**
+     * Custom method
+     *
+     * @param {HTMLElement} insertedRow
+     * @returns {void}
+     */
+    afterAddRowAbove(insertedRow: HTMLElement): void;
+    /**
+     * Custom method
+     *
+     * @param {HTMLElement} insertedRow
+     * @returns {void}
+     */
+    afterAddRowBelow(insertedRow: HTMLElement): void;
+    /**
+     * Custom method
+     *
+     * @returns {void}
+     */
+    afterDeleteRow(): void;
+    /**
+     * Custom method
+     *
+     * @param {HTMLElement[]} insertedCells
+     * @returns {void}
+     */
+    afterAddColumnLeft(insertedCells: HTMLElement[]): void;
+    /**
+     * Custom method
+     *
+     * @returns {void}
+     */
+    afterAddColumnRight(insertedCells: any): void;
+    /**
+     * Custom method
+     *
+     * @returns {void}
+     */
+    afterDeleteColumn(): void;
 }
 import Toolbox from "./toolbox";
