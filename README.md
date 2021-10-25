@@ -14,6 +14,8 @@ npm install --save git+https://github.com/portal2312/editorjs-table.git
 
 ## Hotfix
 
+### TableBlock.constructor() parameters comments in `plugin.js`
+
 ### typo `withHeading` in `plugin.js`
 
 Fixed `withHeading` to `withHeadings`:

@@ -54,19 +54,25 @@ export default class TableBlock {
     /**
      * Render plugin`s main Element and fill it with saved data
      *
-     * @param {TableData} data — previously saved data
-     * @param {TableConfig} config - user config for Tool
-     * @param {object} api - Editor.js API
-     * @param {boolean} readOnly - read-only mode flag
+     * @param {{data: TableData, config: TableConfig, api: object, readOnly: boolean}}
+     *   data - previously saved data
+     *   config - user config for Tool
+     *   api - Editor.js API
+     *   readOnly - read only mode flag
      */
-    constructor({ data, config, api, readOnly }: TableData);
+    constructor({ data, config, api, readOnly }: {
+        data: TableData;
+        config: TableConfig;
+        api: object;
+        readOnly: boolean;
+    });
     api: any;
-    readOnly: any;
+    readOnly: boolean;
     data: {
-        withHeadings: any;
-        content: any;
+        withHeadings: boolean;
+        content: string[][];
     };
-    config: any;
+    config: TableConfig;
     table: Table;
     /**
      * Return Tool's view
