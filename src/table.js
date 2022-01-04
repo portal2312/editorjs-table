@@ -55,6 +55,8 @@ export default class Table {
     /**
      * Create table and wrapper elements
      */
+    this.addColumnButton = null;
+    this.addRowButton = null;
     this.createTableWrapper();
 
     // Current hovered row index
@@ -112,13 +114,15 @@ export default class Table {
        * Also, check if clicked in current table, not other (because documentClicked bound to the whole document)
        */
       if (clickedOnAddRowButton && clickedOnAddRowButton.parentNode === this.wrapper) {
-        const insertedRow = this.addRow(undefined, true);
-        this.afterAddRowBelow(insertedRow);
-        this.hideToolboxes();
+        // NOTE Refer to this.addRowButton, this.onClickAddRowButton
+        // const insertedRow = this.addRow(undefined, true);
+        // this.afterAddRowBelow(insertedRow);
+        // this.hideToolboxes();
       } else if (clickedOnAddColumnButton && clickedOnAddColumnButton.parentNode === this.wrapper) {
-        const insertedCells = this.addColumn(undefined, true);
-        this.afterAddColumnRight(insertedCells);
-        this.hideToolboxes();
+        // NOTE Refer to this.addColumnButton, this.onClickAddColumnButton
+        // const insertedCells = this.addColumn(undefined, true);
+        // this.afterAddColumnRight(insertedCells);
+        // this.hideToolboxes();
       }
     };
 
@@ -471,15 +475,20 @@ export default class Table {
     this.wrapper.appendChild(this.table);
 
     if (!this.readOnly) {
-      const addColumnButton = $.make('div', CSS.addColumn, {
+      this.addColumnButton = $.make('div', CSS.addColumn, {
         innerHTML: svgPlusButton
       });
-      const addRowButton = $.make('div', CSS.addRow, {
+      this.addColumnButton.addEventListener('click', (event) => {
+        this.onClickAddColumnButton(event)
+      });
+      this.addRowButton = $.make('div', CSS.addRow, {
         innerHTML: svgPlusButton
       });
-
-      this.wrapper.appendChild(addColumnButton);
-      this.wrapper.appendChild(addRowButton);
+      this.addRowButton.addEventListener('click', (event) => {
+        this.onClickAddRowButton(event)
+      });
+      this.wrapper.appendChild(this.addColumnButton);
+      this.wrapper.appendChild(this.addRowButton);
     }
   }
 
@@ -1011,4 +1020,26 @@ export default class Table {
    * @returns {void}
    */
   afterDeleteColumn() {}
+
+  /**
+   * Custom method
+   * 
+   * @param {MouseEvent} event 
+   */
+  onClickAddRowButton(event) {
+    const insertedRow = this.addRow(undefined, true);
+    this.afterAddRowBelow(insertedRow);
+    this.hideToolboxes();
+  }
+
+  /**
+   * Custom method
+   * 
+   * @param {MouseEvent} event 
+   */
+  onClickAddColumnButton(event) {
+    const insertedCells = this.addColumn(undefined, true);
+    this.afterAddColumnRight(insertedCells);
+    this.hideToolboxes();
+  }
 }

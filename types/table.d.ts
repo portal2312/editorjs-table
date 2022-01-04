@@ -26,6 +26,11 @@ export default class Table {
      */
     toolboxColumn: Toolbox;
     toolboxRow: Toolbox;
+    /**
+     * Create table and wrapper elements
+     */
+    addColumnButton: Element;
+    addRowButton: Element;
     hoveredRow: number;
     hoveredColumn: number;
     selectedRow: number;
@@ -372,5 +377,17 @@ export default class Table {
      * @returns {void}
      */
     afterDeleteColumn(): void;
+    /**
+     * Custom method
+     *
+     * @param {MouseEvent} event
+     */
+    onClickAddRowButton(event: MouseEvent): void;
+    /**
+     * Custom method
+     *
+     * @param {MouseEvent} event
+     */
+    onClickAddColumnButton(event: MouseEvent): void;
 }
 import Toolbox from "./toolbox";
