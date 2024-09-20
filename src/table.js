@@ -1,14 +1,14 @@
-import svgPlusButton from './img/plus.svg';
-import Toolbox from './toolbox';
+import closeIcon from './img/cross.svg';
+import newToDownIcon from './img/new-to-down.svg';
 import newToLeftIcon from './img/new-to-left.svg';
 import newToRightIcon from './img/new-to-right.svg';
 import newToUpIcon from './img/new-to-up.svg';
-import newToDownIcon from './img/new-to-down.svg';
-import closeIcon from './img/cross.svg';
+import svgPlusButton from './img/plus.svg';
+import Toolbox from './toolbox';
 import * as $ from './utils/dom';
 import throttled from './utils/throttled';
 
-const CSS = {
+export const CSS = {
   wrapper: 'tc-wrap',
   wrapperReadOnly: 'tc-wrap--readonly',
   table: 'tc-table',
@@ -18,7 +18,7 @@ const CSS = {
   cell: 'tc-cell',
   cellSelected: 'tc-cell--selected',
   addRow: 'tc-add-row',
-  addColumn: 'tc-add-column'
+  addColumn: 'tc-add-column',
 };
 
 /**
@@ -73,7 +73,7 @@ export default class Table {
 
     // Additional settings for the table
     this.tunes = {
-      withHeadings: false
+      withHeadings: false,
     };
 
     /**
@@ -92,7 +92,7 @@ export default class Table {
      */
     this.focusedCell = {
       row: 0,
-      column: 0
+      column: 0,
     };
 
     /**
@@ -100,7 +100,8 @@ export default class Table {
      */
     this.documentClicked = (event) => {
       const clickedInsideTable = event.target.closest(`.${CSS.table}`) !== null;
-      const outsideTableClicked = event.target.closest(`.${CSS.wrapper}`) === null;
+      const outsideTableClicked =
+        event.target.closest(`.${CSS.wrapper}`) === null;
       const clickedOutsideToolboxes = clickedInsideTable || outsideTableClicked;
 
       if (clickedOutsideToolboxes) {
@@ -108,17 +109,25 @@ export default class Table {
       }
 
       const clickedOnAddRowButton = event.target.closest(`.${CSS.addRow}`);
-      const clickedOnAddColumnButton = event.target.closest(`.${CSS.addColumn}`);
+      const clickedOnAddColumnButton = event.target.closest(
+        `.${CSS.addColumn}`,
+      );
 
       /**
        * Also, check if clicked in current table, not other (because documentClicked bound to the whole document)
        */
-      if (clickedOnAddRowButton && clickedOnAddRowButton.parentNode === this.wrapper) {
+      if (
+        clickedOnAddRowButton &&
+        clickedOnAddRowButton.parentNode === this.wrapper
+      ) {
         // NOTE Refer to this.addRowButton, this.onClickAddRowButton
         // const insertedRow = this.addRow(undefined, true);
         // this.afterAddRowBelow(insertedRow);
         // this.hideToolboxes();
-      } else if (clickedOnAddColumnButton && clickedOnAddColumnButton.parentNode === this.wrapper) {
+      } else if (
+        clickedOnAddColumnButton &&
+        clickedOnAddColumnButton.parentNode === this.wrapper
+      ) {
         // NOTE Refer to this.addColumnButton, this.onClickAddColumnButton
         // const insertedCells = this.addColumn(undefined, true);
         // this.afterAddColumnRight(insertedCells);
@@ -148,16 +157,24 @@ export default class Table {
     document.addEventListener('click', this.documentClicked);
 
     // Update toolboxes position depending on the mouse movements
-    this.table.addEventListener('mousemove', throttled(150, (event) => this.onMouseMoveInTable(event)), { passive: true });
+    this.table.addEventListener(
+      'mousemove',
+      throttled(150, (event) => this.onMouseMoveInTable(event)),
+      { passive: true },
+    );
 
     // Controls some of the keyboard buttons inside the table
     this.table.onkeypress = (event) => this.onKeyPressListener(event);
 
     // Tab is executed by default before keypress, so it must be intercepted on keydown
-    this.table.addEventListener('keydown', (event) => this.onKeyDownListener(event));
+    this.table.addEventListener('keydown', (event) =>
+      this.onKeyDownListener(event),
+    );
 
     // Determine the position of the cell in focus
-    this.table.addEventListener('focusin', event => this.focusInTableListener(event));
+    this.table.addEventListener('focusin', (event) =>
+      this.focusInTableListener(event),
+    );
   }
 
   /**
@@ -177,7 +194,7 @@ export default class Table {
             const insertedCells = this.addColumn(this.selectedColumn, true);
             this.afterAddColumnLeft(insertedCells);
             this.hideToolboxes();
-          }
+          },
         },
         {
           label: this.api.i18n.t('Add column to right'),
@@ -186,7 +203,7 @@ export default class Table {
             const insertedCells = this.addColumn(this.selectedColumn + 1, true);
             this.afterAddColumnRight(insertedCells);
             this.hideToolboxes();
-          }
+          },
         },
         {
           label: this.api.i18n.t('Delete column'),
@@ -199,8 +216,8 @@ export default class Table {
             this.deleteColumn(this.selectedColumn);
             this.hideToolboxes();
             this.afterDeleteColumn();
-          }
-        }
+          },
+        },
       ],
       onOpen: () => {
         this.selectColumn(this.hoveredColumn);
@@ -208,7 +225,7 @@ export default class Table {
       },
       onClose: () => {
         this.unselectColumn();
-      }
+      },
     });
   }
 
@@ -229,7 +246,7 @@ export default class Table {
             const insertedRow = this.addRow(this.selectedRow, true);
             this.afterAddRowAbove(insertedRow);
             this.hideToolboxes();
-          }
+          },
         },
         {
           label: this.api.i18n.t('Add row below'),
@@ -238,7 +255,7 @@ export default class Table {
             const insertedRow = this.addRow(this.selectedRow + 1, true);
             this.afterAddRowBelow(insertedRow);
             this.hideToolboxes();
-          }
+          },
         },
         {
           label: this.api.i18n.t('Delete row'),
@@ -255,8 +272,8 @@ export default class Table {
 
             this.hideToolboxes();
             this.afterDeleteRow();
-          }
-        }
+          },
+        },
       ],
       onOpen: () => {
         this.selectRow(this.hoveredRow);
@@ -264,7 +281,7 @@ export default class Table {
       },
       onClose: () => {
         this.unselectRow();
-      }
+      },
     });
   }
 
@@ -292,7 +309,9 @@ export default class Table {
    * @returns {HTMLElement}
    */
   getCell(row, column) {
-    return this.table.querySelector(`.${CSS.row}:nth-child(${row}) .${CSS.cell}:nth-child(${column})`);
+    return this.table.querySelector(
+      `.${CSS.row}:nth-child(${row}) .${CSS.cell}:nth-child(${column})`,
+    );
   }
 
   /**
@@ -368,7 +387,10 @@ export default class Table {
        * Autofocus first cell
        */
       if (rowIndex === 1) {
-        const firstCell = this.getCell(rowIndex, columnIndex > 0 ? columnIndex : numberOfColumns + 1);
+        const firstCell = this.getCell(
+          rowIndex,
+          columnIndex > 0 ? columnIndex : numberOfColumns + 1,
+        );
 
         if (firstCell && setFocus) {
           $.focus(firstCell);
@@ -381,7 +403,7 @@ export default class Table {
     this.addHeadingAttrToFirstRow();
 
     return cells;
-  };
+  }
 
   /**
    * Add row in table on index place
@@ -426,7 +448,7 @@ export default class Table {
     }
 
     return insertedRow;
-  };
+  }
 
   /**
    * Delete a column by index
@@ -476,16 +498,16 @@ export default class Table {
 
     if (!this.readOnly) {
       this.addColumnButton = $.make('div', CSS.addColumn, {
-        innerHTML: svgPlusButton
+        innerHTML: svgPlusButton,
       });
       this.addColumnButton.addEventListener('click', (event) => {
-        this.onClickAddColumnButton(event)
+        this.onClickAddColumnButton(event);
       });
       this.addRowButton = $.make('div', CSS.addRow, {
-        innerHTML: svgPlusButton
+        innerHTML: svgPlusButton,
       });
       this.addRowButton.addEventListener('click', (event) => {
-        this.onClickAddRowButton(event)
+        this.onClickAddRowButton(event);
       });
       this.wrapper.appendChild(this.addColumnButton);
       this.wrapper.appendChild(this.addRowButton);
@@ -509,8 +531,10 @@ export default class Table {
     /**
      * Value of config have to be positive number
      */
-    const configRows = !isNaN(parsedRows) && parsedRows > 0 ? parsedRows : undefined;
-    const configCols = !isNaN(parsedCols) && parsedCols > 0 ? parsedCols : undefined;
+    const configRows =
+      !isNaN(parsedRows) && parsedRows > 0 ? parsedRows : undefined;
+    const configCols =
+      !isNaN(parsedCols) && parsedCols > 0 ? parsedCols : undefined;
     const defaultRows = 2;
     const defaultCols = 2;
     const rows = contentRows || configRows || defaultRows;
@@ -518,7 +542,7 @@ export default class Table {
 
     return {
       rows: rows,
-      cols: cols
+      cols: cols,
     };
   }
 
@@ -579,7 +603,7 @@ export default class Table {
    */
   createCell() {
     return $.make('div', CSS.cell, {
-      contentEditable: !this.readOnly
+      contentEditable: !this.readOnly,
     });
   }
 
@@ -595,7 +619,8 @@ export default class Table {
    */
   get numberOfColumns() {
     if (this.numberOfRows) {
-      return this.table.querySelector(`.${CSS.row}:first-child`).childElementCount;
+      return this.table.querySelector(`.${CSS.row}:first-child`)
+        .childElementCount;
     }
 
     return 0;
@@ -649,7 +674,7 @@ export default class Table {
     }
 
     return event.key !== 'Enter';
-  };
+  }
 
   /**
    * Prevents tab keydown event from bubbling
@@ -660,6 +685,11 @@ export default class Table {
   onKeyDownListener(event) {
     if (event.key === 'Tab') {
       event.stopPropagation();
+    }
+
+    if ((event.ctrlKey || event.metaKey) && event.key === 'v') {
+      event.preventDefault();
+      this.pasteClipboard(event);
     }
   }
 
@@ -673,8 +703,10 @@ export default class Table {
     const row = this.getRowByCell(cell);
 
     this.focusedCell = {
-      row: Array.from(this.table.querySelectorAll(`.${CSS.row}`)).indexOf(row) + 1,
-      column: Array.from(row.querySelectorAll(`.${CSS.cell}`)).indexOf(cell) + 1
+      row:
+        Array.from(this.table.querySelectorAll(`.${CSS.row}`)).indexOf(row) + 1,
+      column:
+        Array.from(row.querySelectorAll(`.${CSS.cell}`)).indexOf(cell) + 1,
     };
   }
 
@@ -739,24 +771,29 @@ export default class Table {
    */
   updateToolboxesPosition(row = this.hoveredRow, column = this.hoveredColumn) {
     if (!this.isColumnMenuShowing) {
-      if (column > 0 && column <= this.numberOfColumns) { // not sure this statement is needed. Maybe it should be fixed in getHoveredCell()
+      if (column > 0 && column <= this.numberOfColumns) {
+        // not sure this statement is needed. Maybe it should be fixed in getHoveredCell()
         this.toolboxColumn.show(() => {
           return {
-            left: `calc((100% - var(--cell-size)) / (${this.numberOfColumns} * 2) * (1 + (${column} - 1) * 2))`
+            left: `calc((100% - var(--cell-size)) / (${this.numberOfColumns} * 2) * (1 + (${column} - 1) * 2))`,
           };
         });
       }
     }
 
     if (!this.isRowMenuShowing) {
-      if (row > 0 && column <= this.numberOfColumns) { // not sure this statement is needed. Maybe it should be fixed in getHoveredCell()
+      if (row > 0 && column <= this.numberOfColumns) {
+        // not sure this statement is needed. Maybe it should be fixed in getHoveredCell()
         this.toolboxRow.show(() => {
           const hoveredRowElement = this.getRow(row);
-          const { fromTopBorder } = $.getRelativeCoordsOfTwoElems(this.table, hoveredRowElement);
+          const { fromTopBorder } = $.getRelativeCoordsOfTwoElems(
+            this.table,
+            hoveredRowElement,
+          );
           const { height } = hoveredRowElement.getBoundingClientRect();
 
           return {
-            top: `${Math.ceil(fromTopBorder + height / 2)}px`
+            top: `${Math.ceil(fromTopBorder + height / 2)}px`,
           };
         });
       }
@@ -864,7 +901,7 @@ export default class Table {
 
     let cells = this.table.querySelectorAll(`.${CSS.cellSelected}`);
 
-    Array.from(cells).forEach(column => {
+    Array.from(cells).forEach((column) => {
       column.classList.remove(CSS.cellSelected);
     });
 
@@ -881,7 +918,10 @@ export default class Table {
   getHoveredCell(event) {
     let hoveredRow = this.hoveredRow;
     let hoveredColumn = this.hoveredColumn;
-    const { width, height, x, y } = $.getCursorPositionRelativeToElement(this.table, event);
+    const { width, height, x, y } = $.getCursorPositionRelativeToElement(
+      this.table,
+      event,
+    );
 
     // Looking for hovered column
     if (x >= 0) {
@@ -889,7 +929,7 @@ export default class Table {
         this.numberOfColumns,
         (mid) => this.getCell(1, mid),
         ({ fromLeftBorder }) => x < fromLeftBorder,
-        ({ fromRightBorder }) => x > (width - fromRightBorder)
+        ({ fromRightBorder }) => x > width - fromRightBorder,
       );
     }
 
@@ -899,13 +939,13 @@ export default class Table {
         this.numberOfRows,
         (mid) => this.getCell(mid, 1),
         ({ fromTopBorder }) => y < fromTopBorder,
-        ({ fromBottomBorder }) => y > (height - fromBottomBorder)
+        ({ fromBottomBorder }) => y > height - fromBottomBorder,
       );
     }
 
     return {
       row: hoveredRow || this.hoveredRow,
-      column: hoveredColumn || this.hoveredColumn
+      column: hoveredColumn || this.hoveredColumn,
     };
   }
 
@@ -957,13 +997,13 @@ export default class Table {
     for (let i = 1; i <= this.numberOfRows; i++) {
       const row = this.table.querySelector(`.${CSS.row}:nth-child(${i})`);
       const cells = Array.from(row.querySelectorAll(`.${CSS.cell}`));
-      const isEmptyRow = cells.every(cell => !cell.textContent.trim());
+      const isEmptyRow = cells.every((cell) => !cell.textContent.trim());
 
       if (isEmptyRow) {
         continue;
       }
 
-      data.push(cells.map(cell => cell.innerHTML));
+      data.push(cells.map((cell) => cell.innerHTML));
     }
 
     return data;
@@ -978,7 +1018,7 @@ export default class Table {
 
   /**
    * Custom method
-   * 
+   *
    * @param {HTMLElement} insertedRow
    * @returns {void}
    */
@@ -986,7 +1026,7 @@ export default class Table {
 
   /**
    * Custom method
-   * 
+   *
    * @param {HTMLElement} insertedRow
    * @returns {void}
    */
@@ -994,14 +1034,14 @@ export default class Table {
 
   /**
    * Custom method
-   * 
+   *
    * @returns {void}
    */
   afterDeleteRow() {}
 
   /**
    * Custom method
-   * 
+   *
    * @param {HTMLElement[]} insertedCells
    * @returns {void}
    */
@@ -1009,22 +1049,22 @@ export default class Table {
 
   /**
    * Custom method
-   * 
+   *
    * @returns {void}
    */
   afterAddColumnRight(insertedCells) {}
 
   /**
    * Custom method
-   * 
+   *
    * @returns {void}
    */
   afterDeleteColumn() {}
 
   /**
    * Custom method
-   * 
-   * @param {MouseEvent} event 
+   *
+   * @param {MouseEvent} event
    */
   onClickAddRowButton(event) {
     const insertedRow = this.addRow(undefined, true);
@@ -1034,12 +1074,44 @@ export default class Table {
 
   /**
    * Custom method
-   * 
-   * @param {MouseEvent} event 
+   *
+   * @param {MouseEvent} event
    */
   onClickAddColumnButton(event) {
     const insertedCells = this.addColumn(undefined, true);
     this.afterAddColumnRight(insertedCells);
     this.hideToolboxes();
+  }
+
+  /**
+   * Custom method, Paste from the clipboard.
+   *
+   * @param {KeyboardEvent} event - keydown event
+   */
+  pasteClipboard(event) {
+    navigator.clipboard.readText().then((clipText) => {
+      const { row, column } = this.focusedCell;
+      if (clipText.search(/\r\n/) > -1) {
+        // NOTE: Paste rows.
+        clipText.split(/\r\n/).forEach((content, index) => {
+          const rowIndex = row + index;
+          if (!this.getCell(rowIndex, column)) {
+            this.afterAddRowBelow(this.addRow(rowIndex, false));
+          }
+          this.setCellContent(rowIndex, column, content);
+        });
+      } else if (clipText.search(/\t/) > -1) {
+        // NOTE: Paste columns.
+        clipText.split(/\t/).forEach((content, index) => {
+          const columnIndex = column + index;
+          if (!this.getCell(row, columnIndex)) {
+            this.afterAddColumnRight(this.addColumn(columnIndex, false));
+          }
+          this.setCellContent(row, columnIndex, content);
+        });
+      } else {
+        this.setCellContent(row, column, event.target.innerHTML + clipText);
+      }
+    });
   }
 }

@@ -1,3 +1,15 @@
+export namespace CSS {
+    const wrapper: string;
+    const wrapperReadOnly: string;
+    const table: string;
+    const row: string;
+    const withHeadings: string;
+    const rowSelected: string;
+    const cell: string;
+    const cellSelected: string;
+    const addRow: string;
+    const addColumn: string;
+}
 /**
  * Generates and manages table contents.
  */
@@ -389,5 +401,11 @@ export default class Table {
      * @param {MouseEvent} event
      */
     onClickAddColumnButton(event: MouseEvent): void;
+    /**
+     * Custom method, Paste from the clipboard.
+     *
+     * @param {KeyboardEvent} event - keydown event
+     */
+    pasteClipboard(event: KeyboardEvent): void;
 }
 import Toolbox from "./toolbox";

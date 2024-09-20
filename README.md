@@ -12,7 +12,28 @@ dependence editor-js/table version: 2.0.1
 npm install --save git+https://github.com/portal2312/editorjs-table.git
 ```
 
-## Hotfix
+## Development
+
+```bash
+export NODE_OPTIONS=--openssl-legacy-provider
+yarn build:dev
+```
+
+- `export NODE_OPTIONS=--openssl-legacy-provider`: https://github.com/expo/expo-cli/issues/4619
+
+The `example.html` file in the project open on your browser.
+
+## Build
+
+```bash
+yarn types
+export NODE_OPTIONS=--openssl-legacy-provider
+yarn build
+```
+
+- `export NODE_OPTIONS=--openssl-legacy-provider`: https://github.com/expo/expo-cli/issues/4619
+
+## Troubleshooting
 
 ### TableBlock.constructor() parameters comments in `plugin.js`
 
