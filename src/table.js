@@ -1089,20 +1089,30 @@ export default class Table {
    * @param {KeyboardEvent} event - keydown event
    */
   pasteClipboard(event) {
+    // DEBUG: Show permissions, HTTP 서비스는 보안상 권한 제어할 수 없습니다.
+    // navigator.permissions
+    //   .query({ name: 'clipboard-read' })
+    //   .then((permission) => {
+    //     console.log(permission.state); // 'granted': allow, 'denied': deny, 'prompt': wait
+    //     permission.onchange = () => console.log(permission.state);
+    //   });
     navigator.clipboard.readText().then((clipText) => {
+      // DEBUG: Show clipText.
+      // console.log(JSON.stringify(clipText));
+      const text = clipText.trimEnd();
       const { row, column } = this.focusedCell;
-      if (clipText.search(/\r\n/) > -1) {
+      if (text.search(/\r\n/) > -1) {
         // NOTE: Paste rows.
-        clipText.split(/\r\n/).forEach((content, index) => {
+        text.split(/\r\n/).forEach((content, index) => {
           const rowIndex = row + index;
           if (!this.getCell(rowIndex, column)) {
             this.afterAddRowBelow(this.addRow(rowIndex, false));
           }
           this.setCellContent(rowIndex, column, content);
         });
-      } else if (clipText.search(/\t/) > -1) {
+      } else if (text.search(/\t/) > -1) {
         // NOTE: Paste columns.
-        clipText.split(/\t/).forEach((content, index) => {
+        text.split(/\t/).forEach((content, index) => {
           const columnIndex = column + index;
           if (!this.getCell(row, columnIndex)) {
             this.afterAddColumnRight(this.addColumn(columnIndex, false));
@@ -1110,7 +1120,7 @@ export default class Table {
           this.setCellContent(row, columnIndex, content);
         });
       } else {
-        this.setCellContent(row, column, event.target.innerHTML + clipText);
+        this.setCellContent(row, column, event.target.innerHTML + text);
       }
     });
   }
